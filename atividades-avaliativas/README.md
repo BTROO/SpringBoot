@@ -2,6 +2,5 @@
 
 Aqui estão as atividades avaliativas propostas durante o curso. Cada atividade possui uma pasta separada com seu enunciado e resolução.
 
-## Exemplos
-- Atividade 1: CRUD com Spring Data JPA
-- Atividade 2: Autenticação com Spring Security
+
+
