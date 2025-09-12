@@ -14,6 +14,10 @@ public class ClienteController {
 
     private ClienteRepository clienteRepository;
 
+    public ClienteController(ClienteRepository clienteRepository) {
+        this.clienteRepository = clienteRepository;
+    }
+
     @GetMapping
     public List<Cliente> ListarTodos(){
         return clienteRepository.findAll();

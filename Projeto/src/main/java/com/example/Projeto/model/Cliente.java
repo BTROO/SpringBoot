@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "tab_cliente") //apelido para o banco
 public class Cliente {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //gera o id automatico
     private Long id;
@@ -14,6 +15,12 @@ public class Cliente {
 
     @Column(nullable = false)
     private String telefone;
+
+    //Construtor vazio
+
+    public Cliente() {
+    }
+
 
     //CONSTRUTOR
 
