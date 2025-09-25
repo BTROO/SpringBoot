@@ -16,9 +16,11 @@ import java.util.UUID;
 @RequestMapping("/clientes")
 public class ClienteController {
 
-    @Autowired
     private ClienteService clienteService;
 
+    public ClienteController(ClienteService clienteService) {
+        this.clienteService = clienteService;
+    }
 
     @GetMapping
     public List<Cliente>ListarTodos(){

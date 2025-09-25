@@ -18,11 +18,21 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    public ClienteService(ClienteRepository clienteRepository) {
+        this.clienteRepository = clienteRepository;
+    }
+
     public List<Cliente> ListarTodos (){
          return clienteRepository.findAll();
     }
 
     public Cliente salvar(Cliente cliente){
+        //verificar se o funcionario ja esta cadastrado.
+        if(clienteRepository.findByTelefone(cliente.getTelefone()).isPresent()){
+            //se encontrado o  telefone do cliente no banco de dados, mostra mensagem
+            throw new RuntimeException("Cliente já cadastrado");
+        }
+        //caso encontre o telefone no bd
         return clienteRepository.save(cliente);
 
     }
