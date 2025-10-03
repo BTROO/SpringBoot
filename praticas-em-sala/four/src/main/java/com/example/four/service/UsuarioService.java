@@ -19,14 +19,22 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    // método para salvar um novo usuário
-    // verifica se o email já está cadastrado antes de salvar
-    public UsuarioModel salvarUsuario(UsuarioModel usuario) {
-     if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()){
-       throw new RuntimeException("Email já cadastrado");
-     }
+    public UsuarioModel salvar(UsuarioModel usuario) {
+        if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()){
+          throw new IllegalArgumentException("Email já cadastrado");
+        }
         return usuarioRepository.save(usuario);
     }
+
+
+    // método para salvar um novo usuário
+    // verifica se o email já está cadastrado antes de salvar
+    //public UsuarioModel salvarUsuario(UsuarioModel usuario) {
+     //if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()){
+      // throw new RuntimeException("Email já cadastrado");
+    // }
+       // return usuarioRepository.save(usuario);
+    //}
 
     // método para atualizar um usuário existente
     public UsuarioModel atualizarUsuario(UUID id, UsuarioModel usuario) {
