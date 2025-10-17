@@ -20,27 +20,52 @@ public class UsuarioService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
-    public UsuarioModel salvarUsuario(UsuarioRequestDTO usuarioRequestDTO){
-    if (usuarioRepository.findByEmail(usuarioRequestDTO.getEmail()).isPresent()) {
-            throw  new IllegalArgumentException("Usuario já cadastrado");
-
+    //Salvar um novo usuário. -------------------------------------------
+    public UsuarioModel salvarUsuario(UsuarioRequestDTO usuarioRequestDTO) {
+        //verificando se os dados do novo usuario ja existem no banco de dados.
+        if (usuarioRepository.findByEmail(usuarioRequestDTO.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email já cadastrado");
         }
 
-    UsuarioModel usuario = new UsuarioModel();
-    usuario.setNome(usuarioRequestDTO.getNome());
-    usuario.setEmail(usuarioRequestDTO.getEmail());
+        UsuarioModel novoUsuario = new UsuarioModel();
+        novoUsuario.setNome(usuarioRequestDTO.getNome());
+        novoUsuario.setEmail(usuarioRequestDTO.getEmail());
 
-    //Criptrografar a senha antes de salvar no banco de dados
-        usuario.setSenha(bCryptPasswordEncoder.encode(usuarioRequestDTO.getSenha()));
+        //Criptrografando a senha antes de salvar no banco de dados
+        novoUsuario.setSenha(bCryptPasswordEncoder.encode(usuarioRequestDTO.getSenha()));
 
-        usuarioRepository.save(usuario);
-        return usuario;
-
+        usuarioRepository.save(novoUsuario);
+        return novoUsuario;
     }
 
-    //consultar o banco de dados
+    //Atualizar os dados  ------------------------------------------------------------------
+    public UsuarioModel atualizarUsuario(Long id, UsuarioRequestDTO dto) {
+        if (!usuarioRepository.existsById(id)) {
+            throw new RuntimeException("Cliente não encontrado.");
+        }
 
-    public List<UsuarioResponseDTO> ListarTodos(){
+        UsuarioModel atualizarUsuario = new UsuarioModel();
+        atualizarUsuario.setId(id);
+        atualizarUsuario.setNome(dto.getNome());
+        atualizarUsuario.setEmail(dto.getEmail());
+
+        //Criptrografando a senha antes de salvar.
+        atualizarUsuario.setSenha(bCryptPasswordEncoder.encode(dto.getSenha()));
+
+        usuarioRepository.save(atualizarUsuario);
+        return atualizarUsuario;
+    }
+
+    //Delete ------------------------------------------------------------------------------
+    public void excluirUsuario(Long id) {
+        if (!usuarioRepository.existsById(id)) {
+            throw new RuntimeException("Usuário não encontrado.");
+        }
+
+        usuarioRepository.deleteById(id);
+    }
+
+    public List<UsuarioResponseDTO> listarTodos() {
         return usuarioRepository
                 //Retorna com os dados de todos os usuarios na tabela.
                 .findAll()
@@ -50,6 +75,5 @@ public class UsuarioService {
                 .map( u -> new UsuarioResponseDTO(u.getNome(), u.getEmail()))
                 //Transforma todos os dados em uma Lista
                 .toList();
-
     }
 }
